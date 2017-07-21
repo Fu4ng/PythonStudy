@@ -9,27 +9,51 @@
 import sys
 
 lockLimit = 3
-tryTimes = 0
-login = 0
-data = open('user.txt')
-lock_count = open('locked.txt')
-while tryTimes < lockLimit:
+user = open('user.txt', 'r+')
+flag = 0
+# 格式化数据
+data = {}
+for i in user.readlines():
+    i = i.strip('\n').split()
+    data[i[0]] = {}
+    data[i[0]]['pw'] = i[1]
+    data[i[0]]['time'] = int(i[2])
+user.close()
+while flag == 0:
+    lockCount = open('locked.txt', 'r+')
+    user = open('user.txt', 'r+')
     userName = input('Your name:')
-    userPw = input('Your passwords:')
-    for i in lock_count:
-        if userName == i:
-            sys.exit()
-    for line in data:
-        line = line.split()
-        if userName == line[0] and userPw == line[1]:
-            print('login successful')
-            login = 1
-            break
-
-    if login == 0:
-        print('your pw not right! \n')
+    # 检查是否被锁
+    l_flag = 0
+    for line in lockCount.readlines():
+        if userName in line: l_flag = 1
+    if l_flag == 1:
+        print('%s has be locked! ' % userName)
+        continue
+    # 检查是否在用户名内
+    u_flag = 0
+    for line in user.readlines():
+        if userName in line: u_flag = 1
+    if u_flag == 0:
+        print('sorry,no find your name! ')
+        continue
+    # 文件指针回到开头
+    user.seek(0)
+    # 检查密码是否匹配
+    userPw = input('your pw :')
+    if data[userName]['pw'] == userPw:
+        print('login successfully ! \n')
+        flag = 1
         break
-else:
-    print('locked')
-    addLockCount = open('locked.txt', 'a')
-    addLockCount.write(userName)
+    else:
+        print('your pw worry!')
+        data[userName]['time'] += 1
+        if data[userName]['time'] >= lockLimit:
+            print('%s has be locked !\n ' % userName)
+            lockCount.write(userName)
+            for line in user.readlines():
+                line = line.strip('\n').split()
+                if line[0] == userName: line[2] = str(data[userName]['time'])
+    lockCount.close()
+    user.close()
+    if flag == 1: break

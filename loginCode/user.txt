@@ -1,3 +1,3 @@
-jack 123456
-bob 123456
-steven 12356
+jack 123456 0
+bob 123456 0
+steven 12356 0
