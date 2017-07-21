@@ -16,8 +16,8 @@ lock_count = open('locked.txt')
 while tryTimes < lockLimit:
     userName = input('Your name:')
     userPw = input('Your passwords:')
-    for line in lock_count:
-        if userName == line:
+    for i in lock_count:
+        if userName == i:
             sys.exit()
     for line in data:
         line = line.split()
@@ -25,11 +25,10 @@ while tryTimes < lockLimit:
             print('login successful')
             login = 1
             break
-        else:
-            print('sorry,your passwords not right')
-            tryTimes += 1
-            break
-    if login == 1: break
+
+    if login == 0:
+        print('your pw not right! \n')
+        break
 else:
     print('locked')
     addLockCount = open('locked.txt', 'a')
