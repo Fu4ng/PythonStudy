@@ -19,7 +19,7 @@ def randomCode():
             code.append(i)
         else:
             code.append(chr(random.randint(65, 90)))
-    return code
+    return ','.join(code)
 
 
 print(randomCode())
