@@ -41,13 +41,13 @@ def addLockCount(name):
     with open('user.txt', 'r+') as u:
         for line in u.readlines():
             i = line.split()
-            if name == line[0]:
-                line = line.replace('{0}'.format(i[2]), '{0}'.format(str(int(i[2]) + 1)))
+            if name == i[0]:
+                line = line.replace(' {0}'.format(i[2]), ' {0}'.format(str(int(i[2]) + 1)))
                 if int(i[2]) == lockLimit - 1:
                     line = line.replace('{0}'.format(i[2]), '0')
+                    u.write(line)
                     with open('locked.txt', 'a') as l:
                         l.write(name)
-    return 0
 
 
 name = input('你的用户名：')
