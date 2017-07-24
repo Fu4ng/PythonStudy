@@ -4,8 +4,20 @@
 #
 # 博文地址:
 # --------------------------------------#
+'''
+还不满意的功能：
+不能在txt文件中更新错误次数，还在学习中。
+思路：正则表达式
+'''
+'''
+import re
 
-
+with open('k.txt', 'r+') as f:
+    name = 'bob'
+    pw = '123456'
+    t = '0'
+    f.write(re.sub(r'{0}'.format(name + ' ' + pw + ' ' + t),r'{0}'.format(name + ' ' + pw + ' ' + str(int(t)+1)),f.read()))
+'''
 import sys
 
 lockLimit = 3
