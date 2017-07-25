@@ -4,39 +4,47 @@
 #
 # 博文地址:
 # --------------------------------------#
-'''
-还不满意的功能：
-不能在txt文件中更新错误次数，还在学习中。
-思路：正则表达式
-'''
-'''
-import re
 
-with open('k.txt', 'r+') as f:
-    name = 'bob'
-    pw = '123456'
-    t = '0'
-    f.write(re.sub(r'{0}'.format(name + ' ' + pw + ' ' + t),r'{0}'.format(name + ' ' + pw + ' ' + str(int(t)+1)),f.read()))
+'''
+找到解决方法了。使用fileinput模块
 '''
 import sys
-
+import fileinput
 lockLimit = 3
 
 
 def log(name, psw):
     '登录函数'
+    user_info = []
     with open('user.txt', 'r+') as user:
         for i in user.readlines():
             us, up, ut = i.strip('\n').split()
+            user_info = us +' '+ up+' ' + ut
             if us == name and up == psw:
                 print('登录成功！')
                 return True
             elif us == name and up != psw:
                 print('密码错误')
-                addLockCount(name)
-                return False
+                break
             else:
                 continue
+    addTime(user_info)
+
+
+def addTime(user_info):
+    for line in fileinput.input('user.txt',inplace=1):
+        print(line.replace(user_info,user_info[:-1]+str(int(user_info[-1])+1)).strip())
+    if int(user_info[-1])%3 >=2:
+        addLockedCount(user_info)
+
+def addLockedCount(user_info):
+    i = str(user_info).split()
+    with open('locked.txt','a') as f:
+        f.write(i[0])
+    print("你的账户已被锁定！")
+    for line in fileinput.input('user.txt',inplace=1):
+        print(line.replace(user_info,user_info[:-1]+'0').strip())
+
 
 
 def checkloked(name):
@@ -48,18 +56,7 @@ def checkloked(name):
                 sys.exit()
 
 
-def addLockCount(name):
-    '密码出错三次,添加到被锁账户中'
-    with open('user.txt', 'r+') as u:
-        for line in u.readlines():
-            i = line.split()
-            if name == i[0]:
-                line = line.replace(' {0}'.format(i[2]), ' {0}'.format(str(int(i[2]) + 1)))
-                if int(i[2]) == lockLimit - 1:
-                    line = line.replace('{0}'.format(i[2]), '0')
-                    u.write(line)
-                    with open('locked.txt', 'a') as l:
-                        l.write(name)
+
 
 
 name = input('你的用户名：')

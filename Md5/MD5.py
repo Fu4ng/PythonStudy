@@ -10,10 +10,10 @@
 import hashlib
 
 
-# md5加密的方式
-# hash = hashlib.md5()
-# hash.update(bytes('要加密的东西', encoding='utf-8'))
-# print(hash.hexdigest())
+#md5加密的方式
+hash = hashlib.md5()
+hash.update(bytes('要加密的东西', encoding='utf-8'))
+print(hash.hexdigest())
 
 # 利用md5进行用户登陆网站进行注册之后密码加密的基本事例
 # hashlib简单使用
