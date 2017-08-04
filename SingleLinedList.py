@@ -92,7 +92,7 @@ class SingleLinkedList():  # 单链
                 current = current.getNext()
 
     def insert(self, pos, item):
-        # 这个函数有BUG
+        # 这个函数有BUG.
         if pos == self._size:
             self.append(item)
         else:
